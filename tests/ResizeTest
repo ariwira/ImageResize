@@ -1,0 +1,71 @@
+<?php
+/**
+ *  Corresponding Class to test YourClass class
+ *
+ *  For each class in your library, there should be a corresponding Unit-Test for it
+ *  Unit-Tests should be as much as possible independent from other test going on.
+ *
+ *  @author yourname
+ */
+use Ariwira\ImageResize\Image;
+use Ariwira\ImageResize\Size\Thumbnail;
+use Ariwira\ImageResize\ImageFactory\ImageFactory;
+class ResizeTest extends \PHPUnit\Framework\TestCase{
+
+    /**
+     * Just check if the YourClass has no syntax error
+     *
+     * This is just a simple check to make sure your library has no syntax error. This helps you troubleshoot
+     * any typo before you even use this library in a real project.
+     *
+     */
+    public function testIsThereAnySyntaxError(){
+        $var = new Ariwira\ImageResize\Image();
+        $this->assertTrue(is_object($var));
+        unset($var);
+    }
+
+    /**
+     * Just check if the YourClass has no syntax error
+     *
+     * This is just a simple check to make sure your library has no syntax error. This helps you troubleshoot
+     * any typo before you even use this library in a real project.
+     *
+     */
+    public function testMethod1(){
+        $source = '/Users/selamet/DockerEnv/TestPackage/tests/img/ss1.png';
+        $dest = '/Users/selamet/DockerEnv/TestPackage/tests/dest/';
+        $var = new Image();
+        $result = $var->create($source)
+            ->resize('thumbnail')
+            ->save($dest);
+
+        $this->assertInstanceOf(Ariwira\ImageResize\Image::class, $result);
+        unset($var);
+    }
+
+    public function testMethod2(){
+        $source = '/Users/selamet/DockerEnv/TestPackage/tests/img/ss2.png';
+        $dest = '/Users/selamet/DockerEnv/TestPackage/tests/dest/';
+        $var = new Image();
+        $result = $var->create($source)
+            ->resize('medium')
+            ->save($dest);
+
+        $this->assertInstanceOf(Ariwira\ImageResize\Image::class, $result);
+        unset($var);
+    }
+
+    public function testMethod3(){
+        $source = '/Users/selamet/DockerEnv/TestPackage/tests/img/ss3.png';
+        $dest = '/Users/selamet/DockerEnv/TestPackage/tests/dest/';
+        $var = new Image();
+        $result = $var->create($source)
+            ->resize('large')
+            ->save($dest);
+
+        $this->assertInstanceOf(Ariwira\ImageResize\Image::class, $result);
+        unset($var);
+    }
+
+}

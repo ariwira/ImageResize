@@ -1,0 +1,29 @@
+{
+    "name": "ariwira/image-resize",
+    "description": "Test Library Resizing Image",
+    "type": "library",
+    "require": {
+        "php": ">=5.6",
+        "ext-gd": "*",
+        "ext-exif": "*",
+        "ext-fileinfo": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ariwira\\ImageResize\\": "src/",
+            "Ariwira\\ImageResize\\Size\\": "src/Resize",
+            "Ariwira\\ImageResize\\ImageFactory\\": "src/ImageFactory"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ariwira",
+            "email": "prasetyowira@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
