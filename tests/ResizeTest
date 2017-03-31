@@ -33,8 +33,8 @@ class ResizeTest extends \PHPUnit\Framework\TestCase{
      *
      */
     public function testMethod1(){
-        $source = '/Users/selamet/DockerEnv/TestPackage/tests/img/ss1.png';
-        $dest = '/Users/selamet/DockerEnv/TestPackage/tests/dest/';
+        $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss4.png';
+        $dest = '/Users/selamet/DockerEnv/ImageResize/tests/dest/';
         $var = new Image();
         $result = $var->create($source)
             ->resize('thumbnail')
@@ -45,8 +45,8 @@ class ResizeTest extends \PHPUnit\Framework\TestCase{
     }
 
     public function testMethod2(){
-        $source = '/Users/selamet/DockerEnv/TestPackage/tests/img/ss2.png';
-        $dest = '/Users/selamet/DockerEnv/TestPackage/tests/dest/';
+        $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss5.png';
+        $dest = '/Users/selamet/DockerEnv/ImageResize/tests/dest/';
         $var = new Image();
         $result = $var->create($source)
             ->resize('medium')
