@@ -22,17 +22,17 @@ class ImageResizeServiceProvider extends ServiceProvider
 
         // merge default config
         $this->mergeConfigFrom(
-            __DIR__.'/../config/resize.php',
+            __DIR__.'/../config/config.php.php',
             'image'
         );
 
 //        // set configuration
-//        $app->configure('image');
+        $this->app->configure('image');
 //
 //        // create image
-//        $app->singleton('image',function ($app) {
-//            return new Image($app['config']->get('image'));
-//        });
+        $app->singleton('image',function ($app) {
+            return new Image($app['config']->get('image'));
+        });
 
         $app->alias('image', 'Ariwira\ImageResize\Image');
     }
