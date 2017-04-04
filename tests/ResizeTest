@@ -33,7 +33,7 @@ class ResizeTest extends \PHPUnit\Framework\TestCase{
      *
      */
     public function testMethod1(){
-        $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss4.png';
+        $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss.png';
         $dest = '/Users/selamet/DockerEnv/ImageResize/tests/dest/';
         $var = new Image();
         $result = $var->create($source)
@@ -45,7 +45,7 @@ class ResizeTest extends \PHPUnit\Framework\TestCase{
     }
 
     public function testMethod2(){
-        $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss5.png';
+        $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss.png';
         $dest = '/Users/selamet/DockerEnv/ImageResize/tests/dest/';
         $var = new Image();
         $result = $var->create($source)
@@ -57,13 +57,12 @@ class ResizeTest extends \PHPUnit\Framework\TestCase{
     }
 
     public function testMethod3(){
-        $source = '/Users/selamet/DockerEnv/TestPackage/tests/img/ss3.png';
-        $dest = '/Users/selamet/DockerEnv/TestPackage/tests/dest/';
+        $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss.png';
+        $dest = '/Users/selamet/DockerEnv/ImageResize/tests/dest/';
         $var = new Image();
         $result = $var->create($source)
             ->resize('large')
             ->save($dest);
-
         $this->assertInstanceOf(Ariwira\ImageResize\Image::class, $result);
         unset($var);
     }
