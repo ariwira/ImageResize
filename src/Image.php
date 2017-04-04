@@ -23,6 +23,7 @@ class Image extends File
     const LARGE = 'large';
 
     protected $image;
+    public $final;
 
     public static $factory;
 
@@ -144,6 +145,7 @@ class Image extends File
             default:
                 return false;
         }
+        $this->final = $path;
         return $this;
     }
 
