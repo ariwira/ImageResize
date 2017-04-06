@@ -58,7 +58,7 @@ class File
         // Get real path for our folder
         $rootPath = realpath($this->storagePath);
         $publicpath = realpath($pathname);
-        $savePath = $publicpath.$dirname.'.zip';
+        $savePath = $publicpath.'/'.$dirname.'.zip';
         // Initialize archive object
         $zip = new \ZipArchive();
         $zip->open($savePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);

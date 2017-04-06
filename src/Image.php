@@ -100,7 +100,7 @@ class Image extends File
         $thumb = new Thumbnail($this->image, $this->resolution, $width, $height);
         $this->image = $thumb->createImage($fixed_AspectRatio);
         //save to temp directory
-        $this->save($path == true ? $tempPath.$time : $tempPath);
+        $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
 
         //medium size
         if ($sizeMedium != 0){
@@ -123,7 +123,7 @@ class Image extends File
         $medium = new Medium($this->image, $this->resolution, $width, $height);
         $this->image = $medium->createImage($fixed_AspectRatio);
         //save to temp directory
-        $this->save($path == true ? $tempPath.$time : $tempPath);
+        $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
 
         //Large Size
         if ($sizeLarge != 0){
@@ -142,11 +142,11 @@ class Image extends File
             $height = $this->config['thumbnail'];
             $fixed_AspectRatio = false;
         }
-        $this->size = 'medium';
+        $this->size = 'large';
         $large = new Large($this->image, $this->resolution, $width, $height);
         $this->image = $large->createImage($fixed_AspectRatio);
         //save to temp directory
-        $this->save($path == true ? $tempPath.$time : $tempPath);
+        $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
 
 
 //        if ($sizeThumbnail != 0){
