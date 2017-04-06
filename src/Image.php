@@ -243,7 +243,7 @@ class Image extends File
                 break;
             default:$type = '_';
         }
-        $path = $destination.$type.$this->basename;
+        $path = $destination.'/'.$type.$this->basename;
         $data = $this->image;
         switch ($this->mime){
             case 'image/jpeg':
