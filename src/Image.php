@@ -73,7 +73,7 @@ class Image extends File
         return $this;
     }
 
-    public function resize($sizeThumbnail = 0, $sizeMedium = 0, $sizeLarge = 0, $tempPath)
+    public function resize($tempPath,$sizeThumbnail = 0, $sizeMedium = 0, $sizeLarge = 0)
     {
         $time = Carbon::now()->timestamp;
         $this->time = $time;
