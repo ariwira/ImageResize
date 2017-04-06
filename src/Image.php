@@ -15,6 +15,7 @@ use Ariwira\ImageResize\ImageFactory\PngFactory;
 use Ariwira\ImageResize\Size\Large;
 use Ariwira\ImageResize\Size\Medium;
 use Ariwira\ImageResize\Size\Thumbnail;
+use Carbon\Carbon;
 
 class Image extends File
 {
@@ -28,6 +29,7 @@ class Image extends File
     public static $factory;
 
     private $size;
+    private $time;
 
     public $config = array(
         'thumbnail' => 300,
@@ -71,51 +73,162 @@ class Image extends File
         return $this;
     }
 
-    public function resize($size, $width = 0, $height = 0)
+    public function resize($sizeThumbnail = 0, $sizeMedium = 0, $sizeLarge = 0)
     {
-        $this->size = $size;
-        switch ($size){
-            case self::THUMBNAIL:
-                if ($width != 0 && $height == 0){
-                    $height = $width;
-                    $fixed = false;
-                }else{
-                    $fixed = $width != 0 && $height != 0 ? true : false;
-                    $width = $width == 0 ? $this->config['thumbnail'] : $width;
-                    $height = $height == 0 ? $this->config['thumbnail'] : $height;
-                }
-                $thumb = new Thumbnail($this->image, $this->resolution, $width, $height);
-                $this->image = $thumb->createImage($fixed);
-                break;
-            case self::MEDIUM:
-                if ($width != 0 && $height == 0){
-                    $height = $width;
-                    $fixed = false;
-                }else{
-                    $fixed = $width != 0 && $height != 0 ? true : false;
-                    $width = $width == 0 ? $this->config['medium'] : $width;
-                    $height = $height == 0 ? $this->config['medium'] : $height;
-                }
-                $medium = new Medium($this->image, $this->resolution, $width, $height);
-                $this->image = $medium->createImage($fixed);
-                break;
-            case self::LARGE:
-                if ($width != 0 && $height == 0){
-                    $height = $width;
-                    $fixed = false;
-                }else{
-                    $fixed = $width != 0 && $height != 0 ? true : false;
-                    $width = $width == 0 ? $this->config['large'] : $width;
-                    $height = $height == 0 ? $this->config['large'] : $height;
-                }
-                $large = new Large($this->image, $this->resolution, $width, $height);
-                $this->image = $large->createImage($fixed);
-                break;
+        $time = Carbon::now()->timestamp;
+        $this->time = $time;
+        //create temp dir
+        $path = $this->createTempImageDir($time);
+        //thumbnail
+        if ($sizeThumbnail != 0){
+            //check if param is array(width,height)
+            if (is_array($sizeThumbnail) && count($sizeThumbnail) == 2){
+                $width = $sizeThumbnail[0];
+                $height = $sizeThumbnail[1];
+                $fixed_AspectRatio = true;
+            }else{
+                $width = $sizeThumbnail;
+                $height = $sizeThumbnail;
+                $fixed_AspectRatio = false;
+            }
+        }else{
+            $width = $this->config['thumbnail'];
+            $height = $this->config['thumbnail'];
+            $fixed_AspectRatio = false;
         }
+        $this->size = 'thumbnail';
+        $thumb = new Thumbnail($this->image, $this->resolution, $width, $height);
+        $this->image = $thumb->createImage($fixed_AspectRatio);
+        //save to temp directory
+        $this->save($path == true ? storage_path('app/temp/img/'.$time) : storage_path('app/temp/img/'));
+
+        //medium size
+        if ($sizeMedium != 0){
+            //check if param is array(width,height)
+            if (is_array($sizeMedium) && count($sizeMedium) == 2){
+                $width = $sizeMedium[0];
+                $height = $sizeMedium[1];
+                $fixed_AspectRatio = true;
+            }else{
+                $width = $sizeMedium;
+                $height = $sizeMedium;
+                $fixed_AspectRatio = false;
+            }
+        }else{
+            $width = $this->config['thumbnail'];
+            $height = $this->config['thumbnail'];
+            $fixed_AspectRatio = false;
+        }
+        $this->size = 'medium';
+        $medium = new Medium($this->image, $this->resolution, $width, $height);
+        $this->image = $medium->createImage($fixed_AspectRatio);
+        //save to temp directory
+        $this->save($path == true ? storage_path('app/temp/img/'.$time) : storage_path('app/temp/img/'));
+
+        //Large Size
+        if ($sizeLarge != 0){
+            //check if param is array(width,height)
+            if (is_array($sizeLarge) && count($sizeLarge) == 2){
+                $width = $sizeLarge[0];
+                $height = $sizeLarge[1];
+                $fixed_AspectRatio = true;
+            }else{
+                $width = $sizeLarge;
+                $height = $sizeLarge;
+                $fixed_AspectRatio = false;
+            }
+        }else{
+            $width = $this->config['thumbnail'];
+            $height = $this->config['thumbnail'];
+            $fixed_AspectRatio = false;
+        }
+        $this->size = 'medium';
+        $large = new Large($this->image, $this->resolution, $width, $height);
+        $this->image = $large->createImage($fixed_AspectRatio);
+        //save to temp directory
+        $this->save($path == true ? storage_path('app/temp/img/'.$time) : storage_path('app/temp/img/'));
+
+
+//        if ($sizeThumbnail != 0){
+//            //check if param is array(width,height)
+//            if (is_array($sizeThumbnail) && count($sizeThumbnail) == 2){
+//                $width = $sizeThumbnail[0];
+//                $height = $sizeThumbnail[1];
+//                $fixed_AspectRatio = true;
+//            }else{
+//                $width = $sizeThumbnail;
+//                $height = $sizeThumbnail;
+//                $fixed_AspectRatio = false;
+//            }
+//        }else{
+//            $width = $this->config['thumbnail'];
+//            $height = $this->config['thumbnail'];
+//            $fixed_AspectRatio = false;
+//        }
+//        $thumb = new Thumbnail($this->image, $this->resolution, $width, $height);
+//        $this->image = $thumb->createImage($fixed_AspectRatio);
+
+//
+//        $this->size = $size;
+//        switch ($size){
+//            case self::THUMBNAIL:
+//                if ($width != 0 && $height == 0){
+//                    $height = $width;
+//                    $fixed = false;
+//                }else{
+//                    $fixed = $width != 0 && $height != 0 ? true : false;
+//                    $width = $width == 0 ? $this->config['thumbnail'] : $width;
+//                    $height = $height == 0 ? $this->config['thumbnail'] : $height;
+//                }
+//                $thumb = new Thumbnail($this->image, $this->resolution, $width, $height);
+//                $this->image = $thumb->createImage($fixed);
+//                break;
+//            case self::MEDIUM:
+//                if ($width != 0 && $height == 0){
+//                    $height = $width;
+//                    $fixed = false;
+//                }else{
+//                    $fixed = $width != 0 && $height != 0 ? true : false;
+//                    $width = $width == 0 ? $this->config['medium'] : $width;
+//                    $height = $height == 0 ? $this->config['medium'] : $height;
+//                }
+//                $medium = new Medium($this->image, $this->resolution, $width, $height);
+//                $this->image = $medium->createImage($fixed);
+//                break;
+//            case self::LARGE:
+//                if ($width != 0 && $height == 0){
+//                    $height = $width;
+//                    $fixed = false;
+//                }else{
+//                    $fixed = $width != 0 && $height != 0 ? true : false;
+//                    $width = $width == 0 ? $this->config['large'] : $width;
+//                    $height = $height == 0 ? $this->config['large'] : $height;
+//                }
+//                $large = new Large($this->image, $this->resolution, $width, $height);
+//                $this->image = $large->createImage($fixed);
+//                break;
+//            case 'all':
+//                //create all size and zip it
+//                if ($width != 0 && $height == 0){
+//                    $height = $width;
+//                    $fixed = false;
+//                }else{
+//                    $fixed = $width != 0 && $height != 0 ? true : false;
+//                    $width = $width == 0 ? $this->config['large'] : $width;
+//                    $height = $height == 0 ? $this->config['large'] : $height;
+//                }
+//                $large = new Large($this->image, $this->resolution, $width, $height);
+//                $this->image = $large->createImage($fixed);
+//                break;
+//        }
         return $this;
     }
 
-    public function save($destination = null, $quality = null)
+    public function zip(){
+        return realpath($this->zipDir($this->time));
+    }
+
+    protected function save($destination = null, $quality = null)
     {
         $destination = is_null($destination) ? $this->basePath() : $destination;
         switch ($this->size){
