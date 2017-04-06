@@ -17,6 +17,7 @@ class File
     public $directory;
     public $mime;
     public $resolution;
+    protected $storagePath;
 
     public function setFileInfo($path){
         $info = pathinfo($path);
@@ -49,14 +50,15 @@ class File
     }
 
     protected function createTempImageDir($pathname){
-        return mkdir(storage_path('app/temp/img/'.$pathname),777);
+        $this->storagePath = $pathname;
+        return mkdir($pathname,777);
     }
 
-    protected function zipDir($pathname){
+    protected function zipDir($pathname, $dirname){
         // Get real path for our folder
-        $rootPath = realpath(storage_path('app/temp/img/'.$pathname.'/'));
-        $publicpath = public_path('zip/');
-        $savePath = $publicpath.$pathname.'.zip';
+        $rootPath = realpath($this->storagePath);
+        $publicpath = realpath($pathname);
+        $savePath = $publicpath.$dirname.'.zip';
         // Initialize archive object
         $zip = new \ZipArchive();
         $zip->open($savePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);

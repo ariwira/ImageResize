@@ -73,12 +73,12 @@ class Image extends File
         return $this;
     }
 
-    public function resize($sizeThumbnail = 0, $sizeMedium = 0, $sizeLarge = 0)
+    public function resize($sizeThumbnail = 0, $sizeMedium = 0, $sizeLarge = 0, $tempPath)
     {
         $time = Carbon::now()->timestamp;
         $this->time = $time;
         //create temp dir
-        $path = $this->createTempImageDir($time);
+        $path = $this->createTempImageDir($tempPath.'/'.$time);
         //thumbnail
         if ($sizeThumbnail != 0){
             //check if param is array(width,height)
@@ -100,7 +100,7 @@ class Image extends File
         $thumb = new Thumbnail($this->image, $this->resolution, $width, $height);
         $this->image = $thumb->createImage($fixed_AspectRatio);
         //save to temp directory
-        $this->save($path == true ? storage_path('app/temp/img/'.$time) : storage_path('app/temp/img/'));
+        $this->save($path == true ? $tempPath.$time : $tempPath);
 
         //medium size
         if ($sizeMedium != 0){
@@ -123,7 +123,7 @@ class Image extends File
         $medium = new Medium($this->image, $this->resolution, $width, $height);
         $this->image = $medium->createImage($fixed_AspectRatio);
         //save to temp directory
-        $this->save($path == true ? storage_path('app/temp/img/'.$time) : storage_path('app/temp/img/'));
+        $this->save($path == true ? $tempPath.$time : $tempPath);
 
         //Large Size
         if ($sizeLarge != 0){
@@ -146,7 +146,7 @@ class Image extends File
         $large = new Large($this->image, $this->resolution, $width, $height);
         $this->image = $large->createImage($fixed_AspectRatio);
         //save to temp directory
-        $this->save($path == true ? storage_path('app/temp/img/'.$time) : storage_path('app/temp/img/'));
+        $this->save($path == true ? $tempPath.$time : $tempPath);
 
 
 //        if ($sizeThumbnail != 0){
@@ -224,8 +224,8 @@ class Image extends File
         return $this;
     }
 
-    public function zip(){
-        return realpath($this->zipDir($this->time));
+    public function zip($destination){
+        return realpath($this->zipDir($destination,$this->time));
     }
 
     protected function save($destination = null, $quality = null)
