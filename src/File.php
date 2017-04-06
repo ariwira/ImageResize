@@ -51,7 +51,7 @@ class File
 
     protected function createTempImageDir($pathname){
         $this->storagePath = $pathname;
-        return mkdir($pathname,777);
+        return mkdir($pathname,0777,true);
     }
 
     protected function zipDir($pathname, $dirname){
