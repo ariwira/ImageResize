@@ -33,28 +33,30 @@ class ResizeTest extends \PHPUnit\Framework\TestCase{
      *
      */
     public function testMethod1(){
+//        $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss.png';
+//        $dest = '/Users/selamet/DockerEnv/ImageResize/tests/dest/';
+//        $var = new Image();
+//        var_dump($var->fileSize());
+//        $result = $var->create($source)
+//            ->resize(30)
+//            ->save($dest);
+
+//        $this->assertInstanceOf(Ariwira\ImageResize\Image::class, $result);
+//        unset($var);
+    }
+
+    public function testMethod2(){
         $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss.png';
         $dest = '/Users/selamet/DockerEnv/ImageResize/tests/dest/';
+        $temp = '/Users/selamet/DockerEnv/ImageResize/tests/temp/';
         $var = new Image();
         $result = $var->create($source)
-            ->resize(30);
-//            ->save($dest);
+            ->resize($temp, 300, 700, 1200)
+            ->zip($dest);
 
         $this->assertInstanceOf(Ariwira\ImageResize\Image::class, $result);
         unset($var);
     }
-
-//    public function testMethod2(){
-//        $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss.png';
-//        $dest = '/Users/selamet/DockerEnv/ImageResize/tests/dest/';
-//        $var = new Image();
-//        $result = $var->create($source)
-//            ->resize('medium')
-//            ->save($dest);
-//
-//        $this->assertInstanceOf(Ariwira\ImageResize\Image::class, $result);
-//        unset($var);
-//    }
 //
 //    public function testMethod3(){
 //        $source = '/Users/selamet/DockerEnv/ImageResize/tests/img/ss.png';

@@ -62,11 +62,20 @@ class File
         // Initialize archive object
         $zip = new \ZipArchive();
         $zip->open($savePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-        // Create recursive directory iterator
-        $files = new \RecursiveDirectoryIterator(
-            new \RecursiveDirectoryIterator($rootPath),
-            \RecursiveIteratorIterator::LEAVES_ONLY
-        );
+
+//        return $source;
+        $iterator = new \RecursiveDirectoryIterator($rootPath);
+        // skip dot files while iterating
+        $iterator->setFlags(\RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::SELF_FIRST);
+
+//
+//        // Create recursive directory iterator
+//        $files =
+//            new \RecursiveDirectoryIterator(
+//                new \RecursiveDirectoryIterator($rootPath),
+//                \RecursiveIteratorIterator::LEAVES_ONLY
+//            );
 
         foreach ($files as $name => $file)
         {
