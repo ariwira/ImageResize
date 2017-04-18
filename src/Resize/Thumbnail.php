@@ -23,7 +23,8 @@ class Thumbnail extends \Ariwira\ImageResize\Size\AbstractResize
     {
         $this->setNewResolution($fixed);
         $thumb = imagecreatetruecolor($this->newWidth, $this->newHeight);
-        $resizedImage = imagecopyresampled($thumb, $this->image, 0, 0, 0, 0, $this->newWidth, $this->newHeight,
+        $resizedImage = imagecopyresampled($thumb, $this->image, 0, 0, 0, 0,
+            $this->newWidth, $this->newHeight,
             $this->width, $this->height);
         if ($resizedImage){
             return $thumb;

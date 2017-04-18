@@ -24,6 +24,7 @@ class Image extends File
     const LARGE = 'large';
 
     protected $image;
+    protected $newImage;
     public $final;
 
     public static $factory;
@@ -45,6 +46,29 @@ class Image extends File
     public function configure(array $config = array())
     {
         $this->config = array_replace($this->config, $config);
+        return $this;
+    }
+
+    protected function tests($source,$path)
+    {
+        //1970x1012_ss6
+//        $resource = imagecreatefrompng($source);
+//        $resolution = getimagesize($source);
+//        $thumb = imagecreatetruecolor(800, 411);
+//        $resizedImage = imagecopyresampled($thumb, $resource, 0, 0, 0, 0,
+//            800, 411,
+//            1970, 1012);
+//        imagepng($thumb, $path);
+
+        //ss5 1500x720
+        $resource = imagecreatefrompng($source);
+        $resolution = getimagesize($source);
+        $thumb = imagecreatetruecolor(2100, 1008);
+        $resizedImage = imagecopyresampled($thumb, $resource, 0, 0, 0, 0,
+            2100, 1008,
+            1500, 720);
+        imagepng($thumb, $path);
+
         return $this;
     }
 
@@ -79,6 +103,53 @@ class Image extends File
         $this->time = $time;
         //create temp dir
         $path = $this->createTempImageDir($tempPath.'/'.$time);
+
+        //Large Size
+        if ($sizeLarge != 0){
+            //check if param is array(width,height)
+            if (is_array($sizeLarge) && count($sizeLarge) == 2){
+                $width = $sizeLarge[0];
+                $height = $sizeLarge[1];
+                $fixed_AspectRatio = true;
+            }else{
+                $width = $sizeLarge;
+                $height = $sizeLarge;
+                $fixed_AspectRatio = false;
+            }
+        }else{
+            $width = $this->config['large'];
+            $height = $this->config['large'];
+            $fixed_AspectRatio = false;
+        }
+        $this->size = 'large';
+        $large = new Large($this->image, $this->resolution, $width, $height);
+        $this->newImage = $large->createImage($fixed_AspectRatio);
+//        //save to temp directory
+        $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
+
+        //medium size
+        if ($sizeMedium != 0){
+            //check if param is array(width,height)
+            if (is_array($sizeMedium) && count($sizeMedium) == 2){
+                $width = $sizeMedium[0];
+                $height = $sizeMedium[1];
+                $fixed_AspectRatio = true;
+            }else{
+                $width = $sizeMedium;
+                $height = $sizeMedium;
+                $fixed_AspectRatio = false;
+            }
+        }else{
+            $width = $this->config['medium'];
+            $height = $this->config['medium'];
+            $fixed_AspectRatio = false;
+        }
+        $this->size = 'medium';
+        $medium = new Medium($this->image, $this->resolution, $width, $height);
+        $this->newImage = $medium->createImage($fixed_AspectRatio);
+        //save to temp directory
+        $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
+
         //thumbnail
         if ($sizeThumbnail != 0){
             //check if param is array(width,height)
@@ -98,53 +169,7 @@ class Image extends File
         }
         $this->size = 'thumbnail';
         $thumb = new Thumbnail($this->image, $this->resolution, $width, $height);
-        $this->image = $thumb->createImage($fixed_AspectRatio);
-        //save to temp directory
-        $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
-
-        //medium size
-        if ($sizeMedium != 0){
-            //check if param is array(width,height)
-            if (is_array($sizeMedium) && count($sizeMedium) == 2){
-                $width = $sizeMedium[0];
-                $height = $sizeMedium[1];
-                $fixed_AspectRatio = true;
-            }else{
-                $width = $sizeMedium;
-                $height = $sizeMedium;
-                $fixed_AspectRatio = false;
-            }
-        }else{
-            $width = $this->config['thumbnail'];
-            $height = $this->config['thumbnail'];
-            $fixed_AspectRatio = false;
-        }
-        $this->size = 'medium';
-        $medium = new Medium($this->image, $this->resolution, $width, $height);
-        $this->image = $medium->createImage($fixed_AspectRatio);
-        //save to temp directory
-        $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
-
-        //Large Size
-        if ($sizeLarge != 0){
-            //check if param is array(width,height)
-            if (is_array($sizeLarge) && count($sizeLarge) == 2){
-                $width = $sizeLarge[0];
-                $height = $sizeLarge[1];
-                $fixed_AspectRatio = true;
-            }else{
-                $width = $sizeLarge;
-                $height = $sizeLarge;
-                $fixed_AspectRatio = false;
-            }
-        }else{
-            $width = $this->config['thumbnail'];
-            $height = $this->config['thumbnail'];
-            $fixed_AspectRatio = false;
-        }
-        $this->size = 'large';
-        $large = new Large($this->image, $this->resolution, $width, $height);
-        $this->image = $large->createImage($fixed_AspectRatio);
+        $this->newImage = $thumb->createImage($fixed_AspectRatio);
         //save to temp directory
         $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
 
@@ -244,7 +269,7 @@ class Image extends File
             default:$type = '_';
         }
         $path = $destination.'/'.$type.$this->basename;
-        $data = $this->image;
+        $data = $this->newImage;
         switch ($this->mime){
             case 'image/jpeg':
                 imagejpeg($data, $path);

@@ -25,20 +25,20 @@ abstract class AbstractResize
     abstract public function createImage();
     protected function setNewResolution($fixed){
         if ($fixed){
-            $this->newWidth = $this->paramWidth;
-            $this->newHeight = $this->paramHeight;
+            $this->newWidth = (int)$this->paramWidth;
+            $this->newHeight = (int)$this->paramHeight;
         }else{
             if (($this->width > $this->paramWidth*2 && $this->height > $this->paramHeight*2)
                 && $this->width == $this->height){
-                $this->newWidth = $this->paramWidth;
-                $this->newHeight = $this->paramHeight;
+                $this->newWidth = (int)$this->paramWidth;
+                $this->newHeight = (int)$this->paramHeight;
             }else{
                 if ($this->height >= $this->width){
-                    $this->newHeight = ($this->height * $this->paramHeight) / $this->width;
-                    $this->newWidth = $this->paramWidth;
+                    $this->newHeight = (int)(($this->height * $this->paramHeight) / $this->width);
+                    $this->newWidth = (int)$this->paramWidth;
                 }elseif ($this->height < $this->width){
-                    $this->newWidth = ($this->width * $this->paramWidth) / $this->height;
-                    $this->newHeight = $this->paramHeight;
+                    $this->newWidth = (int)(($this->width * $this->paramWidth) / $this->height);
+                    $this->newHeight = (int)$this->paramHeight;
                 }
             }
         }
