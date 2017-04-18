@@ -22,6 +22,14 @@ abstract class AbstractResize
     protected $newWidth;
     protected $newHeight;
 
+    public function getWidth(){
+        return $this->newWidth;
+    }
+
+    public function getHeight(){
+        return $this->newHeight;
+    }
+
     abstract public function createImage();
     protected function setNewResolution($fixed){
         if ($fixed){

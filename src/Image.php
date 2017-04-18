@@ -124,8 +124,9 @@ class Image extends File
         $this->size = 'large';
         $large = new Large($this->image, $this->resolution, $width, $height);
         $this->newImage = $large->createImage($fixed_AspectRatio);
-//        //save to temp directory
-        $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
+        //save to temp directory
+        $this->save($path == true ? $tempPath.'/'.$time : $tempPath,
+            $large->getWidth(), $large->getHeight());
 
         //medium size
         if ($sizeMedium != 0){
@@ -148,7 +149,8 @@ class Image extends File
         $medium = new Medium($this->image, $this->resolution, $width, $height);
         $this->newImage = $medium->createImage($fixed_AspectRatio);
         //save to temp directory
-        $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
+        $this->save($path == true ? $tempPath.'/'.$time : $tempPath,
+            $medium->getWidth(), $medium->getHeight());
 
         //thumbnail
         if ($sizeThumbnail != 0){
@@ -171,7 +173,8 @@ class Image extends File
         $thumb = new Thumbnail($this->image, $this->resolution, $width, $height);
         $this->newImage = $thumb->createImage($fixed_AspectRatio);
         //save to temp directory
-        $this->save($path == true ? $tempPath.'/'.$time : $tempPath);
+        $this->save($path == true ? $tempPath.'/'.$time : $tempPath,
+            $thumb->getWidth(), $thumb->getHeight());
 
 
 //        if ($sizeThumbnail != 0){
@@ -253,20 +256,20 @@ class Image extends File
         return realpath($this->zipDir($destination,$this->time));
     }
 
-    protected function save($destination = null, $quality = null)
+    protected function save($destination = null, $width, $height, $quality = null)
     {
         $destination = is_null($destination) ? $this->basePath() : $destination;
         switch ($this->size){
             case self::THUMBNAIL:
-                $type = 'thumbnail_';
+                $type = 'thumbnail_'.$width.'x'.$height.'_';
                 break;
             case self::MEDIUM:
-                $type = 'medium_';
+                $type = 'medium_'.$width.'x'.$height.'_';
                 break;
             case self::LARGE:
-                $type = 'large_';
+                $type = 'large_'.$width.'x'.$height.'_';
                 break;
-            default:$type = '_';
+            default:$type = $width.'x'.$height.'_';
         }
         $path = $destination.'/'.$type.$this->basename;
         $data = $this->newImage;
